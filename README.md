@@ -28,7 +28,10 @@ The below table lists all of the Environment Variables that are configurable for
 | SLACK_ENABLED               | **(Optional)** (true/false) Enable or disable the Slack Integration (Default False).                             |
 | SLACK_USERNAME              | **(Optional)** (true/false) Username to use for the Slack Integration (Default: kubernetes-s3-mysql-backup).            |
 | SLACK_CHANNEL               | **(Required if Slack enabled)** Slack Channel the WebHook is configured for.                                     |
-| SLACK_WEBHOOK_URL           | **(Required if Slack enabled)** What is the Slack WebHook URL to post to? Should be configured using a Secret in Kubernetes.                                                                                                                                      |
+| SLACK_WEBHOOK_URL           | **(Required if Slack enabled)** What is the Slack WebHook URL to post to? Should be configured using a Secret in Kubernetes. |
+| TELEGRAM_ENABLED            | **(Optional)** (true/false) Enable or disable the Telegram Integration (Default False).                       |
+| TELEGRAM_CHAT_ID            | **(Required if Telegram enabled)** Telegram channel ID for notifications.                |
+| SLACK_WEBHOOK_URL           | **(Required if Slack enabled)** Telegram webhook with token to access the HTTP API use.                                                                                                                                                |
 
 
 ## Slack Integration
@@ -98,27 +101,31 @@ type: Opaque
 data:
   slack_webhook_url: <Your Slack WebHook URL>
 ---
-apiVersion: batch/v1beta1
+apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: my-database-backup
 spec:
-  schedule: "0 01 * * *"
+  schedule: "00 01 * * *"
   jobTemplate:
     spec:
       template:
         spec:
           containers:
           - name: my-database-backup
-            image: gcr.io/maynard-io-public/kubernetes-s3-mysql-backup
+            image: apolovenkov/k8s-s3-mysql-backup:latest
             imagePullPolicy: Always
             env:
+              - name: AWS_S3_ENDPOINT_URL
+                value: "<Your S3 Endpoint>"
+              - name: AWS_S3_ENDPOINT_SCEME
+                value: "<Your S3 Endpoint Scheme>" 
               - name: AWS_ACCESS_KEY_ID
                 value: "<Your Access Key>"
               - name: AWS_SECRET_ACCESS_KEY
                 valueFrom:
                    secretKeyRef:
-                     name: AWS_SECRET_ACCESS_KEY
+                     name: backupdb-s3-secretkey
                      key: aws_secret_access_key
               - name: AWS_DEFAULT_REGION
                 value: "<Your S3 Bucket Region>"
@@ -137,7 +144,7 @@ spec:
               - name: TARGET_DATABASE_PASSWORD
                 valueFrom:
                    secretKeyRef:
-                     name: TARGET_DATABASE_PASSWORD
+                     name: backupdb-target-password
                      key: database_password
               - name: SLACK_ENABLED
                 value: "<true/false>"
@@ -146,7 +153,15 @@ spec:
               - name: SLACK_WEBHOOK_URL
                 valueFrom:
                    secretKeyRef:
-                     name: SLACK_WEBHOOK_URL
+                     name: backupdb-slack-webhook
                      key: slack_webhook_url
+              - name: BACKUP_DEPTH
+                value: "3"
+              - name: TELEGRAM_ENABLED
+                value: "<true/false>"
+              - name: TELEGRAM_CHAT_ID
+                value: "<Your Telegram Chat ID>"
+              - name: TELEGRAM_WEBHOOK_URL
+                value: "<Your Telegram Webhook>"                
           restartPolicy: Never
 ```

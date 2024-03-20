@@ -18,12 +18,17 @@ RUN apk -v --update add \
 ENV TARGET_DATABASE_PORT=3306
 ENV SLACK_ENABLED=false
 ENV SLACK_USERNAME=kubernetes-s3-mysql-backup
+ENV TELEGRAM_ENABLED=false
 
 # Copy Slack Alert script and make executable
 COPY resources/slack-alert.sh /
 RUN chmod +x /slack-alert.sh
 
+# Copy Telegram Alert script and make executable
+COPY resources/telegram-notification.sh /
+RUN chmod +x /telegram-notification.sh
+
 # Copy backup script and execute
-COPY resources/perform-backup.sh /
-RUN chmod +x /perform-backup.sh
-CMD ["sh", "/perform-backup.sh"]
+COPY resources/backup.sh /
+RUN chmod +x /backup.sh
+CMD ["sh", "/backup.sh"]
