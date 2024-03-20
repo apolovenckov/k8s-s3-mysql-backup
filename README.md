@@ -32,7 +32,7 @@ The below table lists all of the Environment Variables that are configurable for
 | SLACK_WEBHOOK_URL           | **(Required if Slack enabled)** What is the Slack WebHook URL to post to? Should be configured using a Secret in Kubernetes. |
 | TELEGRAM_ENABLED            | **(Optional)** (true/false) Enable or disable the Telegram Integration (Default False).                       |
 | TELEGRAM_CHAT_ID            | **(Required if Telegram enabled)** Telegram channel ID for notifications.                |
-| SLACK_WEBHOOK_URL           | **(Required if Telegram enabled)** Telegram webhook with token to access the HTTP API use.                                                                                                                                                |
+| TELEGRAM_WEBHOOK_URL        | **(Required if Telegram enabled)** Telegram webhook with token to access the HTTP API use.                                                                                                                                                |
 
 
 ## Slack Integration
