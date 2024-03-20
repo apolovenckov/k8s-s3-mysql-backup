@@ -25,13 +25,14 @@ The below table lists all of the Environment Variables that are configurable for
 | TARGET_DATABASE_NAMES       | **(Required)** Name of the databases to dump. This should be comma seperated (e.g. `database1,database2`).       |
 | TARGET_DATABASE_USER        | **(Required)** Username to authenticate to the database with.                                                    |
 | TARGET_DATABASE_PASSWORD    | **(Required)** Password to authenticate to the database with. Should be configured using a Secret in Kubernetes. |
+| BACKUP_DEPTH                | **(Required)** Determines the backup storage depth.                        |
 | SLACK_ENABLED               | **(Optional)** (true/false) Enable or disable the Slack Integration (Default False).                             |
 | SLACK_USERNAME              | **(Optional)** (true/false) Username to use for the Slack Integration (Default: kubernetes-s3-mysql-backup).            |
 | SLACK_CHANNEL               | **(Required if Slack enabled)** Slack Channel the WebHook is configured for.                                     |
 | SLACK_WEBHOOK_URL           | **(Required if Slack enabled)** What is the Slack WebHook URL to post to? Should be configured using a Secret in Kubernetes. |
 | TELEGRAM_ENABLED            | **(Optional)** (true/false) Enable or disable the Telegram Integration (Default False).                       |
 | TELEGRAM_CHAT_ID            | **(Required if Telegram enabled)** Telegram channel ID for notifications.                |
-| SLACK_WEBHOOK_URL           | **(Required if Slack enabled)** Telegram webhook with token to access the HTTP API use.                                                                                                                                                |
+| SLACK_WEBHOOK_URL           | **(Required if Telegram enabled)** Telegram webhook with token to access the HTTP API use.                                                                                                                                                |
 
 
 ## Slack Integration
